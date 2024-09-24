@@ -5,15 +5,21 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Linkedin, Twitter, Instagram, Facebook } from 'lucide-react';
 import CalButton from './cal-button';
-import { ProfileData, profileData } from '@/lib/utils';
 import Link from 'next/link';
+import { getProfile } from '@/app/actions';
+import { ProfileData } from '@/lib/utils';
+import EmptyProfile from './empty-profile';
 
-export default function PersonalProfile() {
-  return (
+export default async function PersonalProfile() {
+  const profileData = (await getProfile()) as ProfileData;
+
+  return profileData ? (
     <div className='flex flex-col'>
       <ProfileHeader name={profileData.name} avatar={profileData.avatar} />
       <ProfileDetails data={profileData} />
     </div>
+  ) : (
+    <EmptyProfile />
   );
 }
 
